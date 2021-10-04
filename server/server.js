@@ -1,9 +1,8 @@
 const express = require('express');
-
 // import ApolloServer
 const { ApolloServer } = require('apollo-server-express');
 
-//import schemas (typeDef and resolvers)
+// import our typeDefs and resolvers
 const { typeDefs, resolvers } = require('./schemas');
 const db = require('./config/connection');
 
@@ -15,7 +14,6 @@ const startServer = async () => {
   const server = new ApolloServer({ 
     typeDefs, 
     resolvers
-    // context: authMiddleware 
   });
 
   // Start the Apollo server
@@ -39,3 +37,4 @@ db.once('open', () => {
     console.log(`API server running on port ${PORT}!`);
   });
 });
+
