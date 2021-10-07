@@ -1,5 +1,6 @@
 import React from 'react';
 import { ApolloProvider, ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context'; 
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -8,15 +9,28 @@ import NoMatch from './pages/NoMatch';
 import SingleThought from './pages/SingleThought';
 import Profile from './pages/Profile';
 import Signup from './pages/Signup';
-
 import Home from './pages/Home';
 
 const httpLink = createHttpLink({
   uri: '/graphql'
 });
 
+// the underscore serveres as a placeholder for a parameter that we can skip. we don't need the data, but it needs a placeholder to access the second one
+const authLink = setContext((_, { headers }) => {
+  // gets user specific token from local storage
+  const token = localStorage.getItem('id_token');
+  return {
+    // ever headers request will now incorporate the token to make sure the session is valid/active
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : '',
+    },
+  };
+});
+
 const client = new ApolloClient({
-  link: httpLink,
+  // combines the http and authlink so that every http request includes the auth token
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
 
