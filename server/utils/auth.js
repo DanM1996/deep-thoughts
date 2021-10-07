@@ -19,7 +19,7 @@ module.exports = {
             .split('Bearer')
             .pop()
             .trim();
-            console.log(token, "token");
+            // console.log(token, "token");
         }
 
         // if no token, return request object as is
@@ -32,7 +32,7 @@ module.exports = {
             const { data } = jwt.verify(token, secret, { maxAge: expiration });
             req.user = data;
         } catch {
-            console.log('Invalid token');
+            // console.log('Invalid token');
         }
 
         // return updated request object
