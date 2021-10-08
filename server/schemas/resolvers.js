@@ -5,14 +5,14 @@ const { signToken } = require('../utils/auth');
 const resolvers = {
   Query: {
     me: async () => {
-      if (context.user) {
+      // if (context.user) {
         const userData = await User.findOne({})
-          .select('-__v -password')
+          // .select('-__v -password')
           .populate('thoughts')
           .populate('friends');
 
         return userData;
-      }
+      
       throw new AuthenticationError('Not logged in');
     },
     users: async () => {
@@ -23,8 +23,6 @@ const resolvers = {
     },
     user: async (parent, { username }) => {
       return User.findOne({ username })
-        .select('-__v -password')
-        .populate('friends')
         .populate('thoughts');
     },
     thoughts: async (parent, { username }) => {
